@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+input,
+button {
+  border-radius: 10px;
+  border: none;
+  &:focus {
+    outline: none;
+  }
+}
