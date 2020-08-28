@@ -1,15 +1,18 @@
 <div class="header">
   <div>
-    <input type="text" placeholder="Введите тэг" (input)="inputHandler($event)" (click)="tagShow = 'none'"
+    <input type="text" placeholder="Введите тэг" (input)="inputHandler($event)" (click)="tagShow = false"
       [value]="tagValue">
-    <div class="header__error" [ngStyle]="{display: tagShow}">{{ tagError }}</div>
+    <div class="header__error" *ngIf="tagShow">{{ tagError }}</div>
   </div>
   <button class="header__download" (click)="addTagImage()" [disabled]="disabled">{{ tagDownload }}</button>
   <button class="header__clear" (click)="clearAll()">Очистить</button>
   <button class="header__group" (click)="sortImages()">{{ grouped }}</button>
 </div>
 
-<ul class="content" *ngIf="!sort">
+<app-content [sort]='sort' [image_url]='image_url' [tagArray]='tagArray'
+[tagGroups]='tagGroups' [(tagValue)]='tagValue'></app-content>
+
+<!--<ul class="content" *ngIf="!sort">
   <li *ngFor="let image of tagArray">
     <img [src]="image.image_url" (click)="tagValue=image.tag">
   </li>
@@ -23,4 +26,4 @@
       </div>
     </div>
   </li>
-</ul>
+</ul>-->

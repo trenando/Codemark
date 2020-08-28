@@ -1,0 +1,15 @@
+<ul class="content" *ngIf="!sort">
+  <li *ngFor="let image of tagArray">
+    <img [src]="image.image_url" (click)="onChangeInputValue($event)">
+  </li>
+</ul>
+<ul class="content__sorted" *ngIf="sort">
+  <li *ngFor="let arr of tagGroups">
+    <span>{{ arr[0] }}</span>
+    <div class="content__images">
+      <div *ngFor="let image of arr[1]">
+        <img [src]="image" (click)="onChangeInputValue($event)">
+      </div>
+    </div>
+  </li>
+</ul>

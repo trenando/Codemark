@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { from, zip, of } from 'rxjs';
 import { groupBy, mergeMap, toArray } from 'rxjs/operators';
+import { PhotosAPI } from '../api/app.services';
+
+//import { state } from '../state/state';
 
 type DataType = {
   data: {
@@ -9,7 +11,7 @@ type DataType = {
   }
 };
 
-type TagArrayType = {
+export type TagArrayType = {
   tag: string,
   image_url: string
 };
@@ -21,12 +23,12 @@ type TagArrayType = {
 })
 export class AppComponent {
 
-  constructor(private http: HttpClient) { }
+  constructor(private get: PhotosAPI) { }
 
   API_KEY: string = 'EOZ5eIZAdtYAPUXT7FKjYBGbK9UbzssO';
   tagValue: string = '';
   tagError: string = 'Введен пустой тэг';
-  tagShow: 'none' | 'block' = 'none';
+  tagShow: boolean = false;
   tagDownload: 'Загрузить' | 'Загрузка...' = 'Загрузить';
   disabled: boolean = false;
   image_url: string;
@@ -34,20 +36,19 @@ export class AppComponent {
   tagArray: TagArrayType[] = [];
   tagGroups: any = [];
   sort: boolean = false;
-  firstSort: boolean = true;
 
   addTagImage() {
     if (this.tagValue == '') {
-      return this.tagShow = 'block';
+      return this.tagShow = !this.tagShow;
     } else {
       this.tagDownload = 'Загрузка...';
-      this.disabled = true;
-      this.http.get(`https://api.giphy.com/v1/gifs/random?api_key=${this.API_KEY}&tag=${this.tagValue}`)
+      this.disabled = !this.disabled;
+      this.get.getData(this.API_KEY, this.tagValue)
         .subscribe(
           (data: DataType) => {
             if (!data.data.image_url) {
               return (this.tagError = 'По тегу ничего не найдено',
-                this.tagShow = 'block');
+                this.tagShow = !this.tagShow);
             } else {
               this.image_url = data.data.image_url;
               this.tagArray.push({ tag: this.tagValue, image_url: this.image_url })
@@ -56,22 +57,22 @@ export class AppComponent {
           },
           //обработчик ошибок также может принимать err как переменную
           () => {
-            return (this.tagError = 'Произошла http ошибка', this.tagShow = 'block');
+            return (this.tagError = 'Произошла http ошибка', this.tagShow = !this.tagShow);
           },
           //callback когда стрим завершится
           () => {
-            return (this.disabled = false, this.tagDownload = 'Загрузить');
+            return (this.disabled = !this.disabled, this.tagDownload = 'Загрузить');
           }
         );
     }
   };
 
   clearAll() {
-    return this.tagValue = '';
+    return (this.tagValue = '', this.tagArray = [], this.sort = false, this.grouped = 'Группировать');
   }
 
   sortImages() {
-    if (this.firstSort) {
+    if (!this.sort) {
       from(this.tagArray)
         .pipe(
           groupBy(arr => arr.tag),
@@ -84,17 +85,10 @@ export class AppComponent {
           return element;
         });
       });
-      this.firstSort = false;
-    } else{
-      this.firstSort = true;
-      this.tagGroups = [];
-    };
-    if (!this.sort) {
-      this.grouped = 'Разгруппировать';
+      return (this.sort = !this.sort, this.grouped = 'Разгруппировать', this.tagGroups);
     } else {
-      this.grouped = 'Группировать';
-    }
-    return (this.sort = !this.sort, this.grouped);
+      return (this.sort = !this.sort, this.grouped = 'Группировать', this.tagGroups = []);
+    };
   };
 
   inputHandler(e) {
