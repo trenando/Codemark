@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { TagArrayType } from '../app.component';
+import { TagImageElementType } from '../app.component';
 
 @Component({
   selector: 'app-content',
@@ -11,8 +11,8 @@ export class ContentComponent {
 
   @Input() sort: boolean = false;
   @Input() image_url: string;
-  @Input() tagArray: TagArrayType[] = [];
-  @Input() tagGroups: any = [];
+  @Input() tagImagesArray: TagImageElementType[] = [];
+  @Input() tagImagesArrayGroup: any = [];
   @Input() tagValue: string;
   @Output() changeInputValue = new EventEmitter<string>();
   onChangeInputValue(value: string) {

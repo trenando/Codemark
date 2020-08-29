@@ -12,4 +12,4 @@ export class PhotosAPI {
     return this.http.get(`https://api.giphy.com/v1/gifs/random?api_key=${API_KEY}&tag=${API_VALUE}`);
   }
 
-}
+};

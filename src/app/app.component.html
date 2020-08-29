@@ -1,29 +1,13 @@
 <div class="header">
   <div>
-    <input type="text" placeholder="Введите тэг" (input)="inputHandler($event)" (click)="tagShow = false"
+    <input type="text" placeholder="Введите тэг" (input)="inputHandler($event.target.value)" (click)="showError = false"
       [value]="tagValue">
-    <div class="header__error" *ngIf="tagShow">{{ tagError }}</div>
+    <div class="header__error" *ngIf="showError">{{ error }}</div>
   </div>
-  <button class="header__download" (click)="addTagImage()" [disabled]="disabled">{{ tagDownload }}</button>
+  <button class="header__download" (click)="addTagImage()" [disabled]="disabled">{{ donwloadImage }}</button>
   <button class="header__clear" (click)="clearAll()">Очистить</button>
   <button class="header__group" (click)="sortImages()">{{ grouped }}</button>
 </div>
 
-<app-content [sort]='sort' [image_url]='image_url' [tagArray]='tagArray'
-[tagGroups]='tagGroups' [(tagValue)]='tagValue'></app-content>
-
-<!--<ul class="content" *ngIf="!sort">
-  <li *ngFor="let image of tagArray">
-    <img [src]="image.image_url" (click)="tagValue=image.tag">
-  </li>
-</ul>
-<ul class="content__sorted" *ngIf="sort">
-  <li *ngFor="let arr of tagGroups">
-    <span>{{ arr[0] }}</span>
-    <div class="content__images">
-      <div *ngFor="let image of arr[1]">
-        <img [src]="image" (click)="tagValue=image.tag">
-      </div>
-    </div>
-  </li>
-</ul>-->
+<app-content [sort]='sort' [image_url]='image_url' [tagImagesArray]='tagImagesArray'
+[tagImagesArrayGroup]='tagImagesArrayGroup' [(tagValue)]='tagValue'></app-content>
