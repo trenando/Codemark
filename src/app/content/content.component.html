@@ -1,14 +1,14 @@
-<ul class="content" *ngIf="!sort">
-  <li *ngFor="let image of tagImagesArray">
-    <img [src]="image[1]" (click)="onChangeInputValue($event)">
+<ul class="content" *ngIf="!appService.sort">
+  <li *ngFor="let image of appService.tagImagesArray">
+    <img [src]="image[1]" (click)="onChangeInputValue(image[0])">
   </li>
 </ul>
-<ul class="content__sorted" *ngIf="sort">
-  <li *ngFor="let arr of tagImagesArrayGroup">
+<ul class="content__sorted" *ngIf="appService.sort">
+  <li *ngFor="let arr of appService.tagImagesArrayGroup">
     <span>{{ arr[0] }}</span>
     <div class="content__images">
       <div *ngFor="let image of arr[1]">
-        <img [src]="image[1]" (click)="onChangeInputValue($event)">
+        <img [src]="image[1]" (click)="onChangeInputValue(image[0])">
       </div>
     </div>
   </li>

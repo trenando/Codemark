@@ -1,13 +1,12 @@
 <div class="header">
   <div>
-    <input type="text" placeholder="Введите тэг" (input)="inputHandler($event.target.value)" (click)="showError = false"
-      [value]="tagValue">
-    <div class="header__error" *ngIf="showError">{{ error }}</div>
+    <input type="text" placeholder="Введите тэг" (input)="inputHandler($event.target.value)" (click)="appService.showError = false"
+      [value]="appService.tagValue">
+    <div class="header__error" *ngIf="appService.showError">{{ appService.error }}</div>
   </div>
-  <button class="header__download" (click)="addTagImage()" [disabled]="disabled">{{ donwloadImage }}</button>
+  <button class="header__download" (click)="addTagImage()" [disabled]="appService.disabled">{{ appService.donwloadImage }}</button>
   <button class="header__clear" (click)="clearAll()">Очистить</button>
-  <button class="header__group" (click)="sortImages()">{{ grouped }}</button>
+  <button class="header__group" (click)="sortImages()">{{ appService.grouped }}</button>
 </div>
 
-<app-content [sort]='sort' [image_url]='image_url' [tagImagesArray]='tagImagesArray'
-[tagImagesArrayGroup]='tagImagesArrayGroup' [(tagValue)]='tagValue'></app-content>
+<app-content></app-content>
