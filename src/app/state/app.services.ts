@@ -70,7 +70,7 @@ export class AppServices {
   };
 
   clearAll() {
-    return (this.tagValue = '', this.tagImagesArray = [], this.sort = false, this.grouped = 'Группировать');
+    return (this.tagValue = '', this.tagImagesArray = [], this.sort = false, this.grouped = 'Группировать',this.tagImagesArrayGroup = []);
   }
 
   sortImages() {
