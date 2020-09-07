@@ -24,7 +24,7 @@ type TagImagesArrayGroupType = TagImageElementType[];
 @Injectable({ providedIn: 'root' })
 export class AppServices {
 
-  constructor(private get: PhotosAPI) { }
+  constructor(private api: PhotosAPI) { }
 
   API_KEY: string = 'EOZ5eIZAdtYAPUXT7FKjYBGbK9UbzssO';
   tagValue: string = '';
@@ -38,42 +38,48 @@ export class AppServices {
   image_url: string;
   tagImagesArrayGroup: TagImagesArrayGroupType = [];
 
-  addTagImage() {
+  addTagImage() :void {
     if (this.tagValue == '') {
-      return (this.showError = true,
-        this.error = 'Введен пустой тэг');
+      this.showError = true;
+      this.error = 'Введен пустой тэг';
     } else {
       this.donwloadImage = 'Загрузка...';
       this.disabled = !this.disabled;
-      this.get.getData(this.API_KEY, this.tagValue)
+      this.api.getData(this.API_KEY, this.tagValue)
         .subscribe(
           (data: DataType) => {
             if (!data.data.image_url) {
-              return (this.error = 'По тегу ничего не найдено',
-                this.showError = true);
+              this.error = 'По тегу ничего не найдено';
+              this.showError = true;
             } else {
               this.image_url = data.data.image_url;
               this.tagImagesArray.push([this.tagValue, this.image_url])
-              return this.tagImagesArray;
+              this.tagImagesArray;
             }
           },
           //обработчик ошибок также может принимать err как переменную
           () => {
-            return (this.error = 'Произошла http ошибка', this.showError = true);
+            this.error = 'Произошла http ошибка';
+            this.showError = true;
           },
           //callback когда стрим завершится
           () => {
-            return (this.disabled = !this.disabled, this.donwloadImage = 'Загрузить');
+            this.disabled = !this.disabled;
+            this.donwloadImage = 'Загрузить';
           }
         );
     }
   };
 
-  clearAll() {
-    return (this.tagValue = '', this.tagImagesArray = [], this.sort = false, this.grouped = 'Группировать',this.tagImagesArrayGroup = []);
+  clearAll(): void {
+    this.tagValue = '';
+    this.tagImagesArray = [];
+    this.sort = false;
+    this.grouped = 'Группировать';
+    this.tagImagesArrayGroup = [];
   }
 
-  sortImages() {
+  sortImages(): void {
     if (!this.sort) {
       from(this.tagImagesArray)
         .pipe(
@@ -81,14 +87,18 @@ export class AppServices {
           mergeMap(group => zip(of(group.key), group.pipe(toArray())))
         )
         .subscribe(val => this.tagImagesArrayGroup.push(val));
-      return (this.sort = !this.sort, this.grouped = 'Разгруппировать', this.tagImagesArrayGroup);
+      this.sort = !this.sort;
+      this.grouped = 'Разгруппировать';
+      this.tagImagesArrayGroup;
     } else {
-      return (this.sort = !this.sort, this.grouped = 'Группировать', this.tagImagesArrayGroup = []);
+      this.sort = !this.sort;
+      this.grouped = 'Группировать';
+      this.tagImagesArrayGroup = [];
     };
   };
 
-  inputHandler(value: string) {
-    return this.tagValue = value;
+  inputHandler(value: string) : void {
+    this.tagValue = value;
   };
 
 };
